@@ -1,2 +1,2 @@
-#export db uri=''
-python3 manage.py server
+export SECRET_KEY='Serum@2551$'
+python manage.py server

@@ -1,1 +1,30 @@
-{% extends 'base.html'%}
+{% extends 'base.html'%} {%block styles%} {{super()}}
+<link href="\static\css\index.css" rel="stylesheet"> {%endblock%} {%block content%}
+<div class="container">
+    <div class="row mt-3 words">
+        <div class="col-md-6">
+            <img src="/static/images/welcome.png" alt="welcome" style="width:448px;height:448px;">
+        </div>
+        <div class="col-md-6 mt-3 pt-2">
+         <center>
+            <h1 class="titlee">
+                <center>BLOG</center>
+            </h1>
+            <br></br>
+            <h5>Blogging can be incredibly valuable to a variety of people and for a variety of reasons. Blogging is not just for businesses! I’ve benefited personally, professionally, and financially from blogging. </h5>
+            <br></br>
+
+            <h5> Writing has actually become one of my favorite hobbies. I recommend blogging to almost everyone I meet.</h5>
+
+            <h5>Read the blogs below </h5>
+           
+            <a class="btn btn-primary " href="{{ url_for('main.blogs')}}" role="button">View Blogs</a>
+
+</center>
+    
+           
+        </div>
+    </div>
+</div>
+
+ {%endblock%}

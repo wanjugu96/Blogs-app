@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{%block styles%}
+{{super()}}
+{%endblock%}
+{%block content%}
+<div class="container">
+<div class="col-md-4">
+<h6>Hello {{name}}</h6>
+<h6>Submit Your blog below</h6>
+
+            {{ wtf.quick_form(form) }}
+            
+            
+        </div>
+        </div>
+        
+{%endblock%}
