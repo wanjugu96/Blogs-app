@@ -1,3 +1,4 @@
+from flask.helpers import flash
 from app.main.forms import submitblogform, submitcommentform
 from flask import render_template,request,redirect,url_for
 from . import main
@@ -13,7 +14,6 @@ def index():
 def profile(uname):
     user=User.query.filter_by(username=uname).first()
     user_idd=user.id
-    #pitches=Pitch.query.filter_by(user_id=user_idd).all()
 
     if user is None:
         abort(404)
@@ -34,7 +34,7 @@ def update_pic(uname):
         db.session.commit()
         return redirect(url_for('main.profile',uname=uname))    
 
-@main.route('/submitpitch',methods=['GET','POST'])
+@main.route('/submitblog',methods=['GET','POST'])
 @login_required
 def submitblog():
     form=submitblogform(request.form)
@@ -53,12 +53,6 @@ def submitblog():
         
         return redirect(url_for('.blogs'))
                 
-        #return redirect(url_for('.index'))category
-    
-    
-
-    #return redirect(url_for('.pitches',category=form.category.data))
-    
     return render_template('blog/submitblog.html',form=form,name=current_user.username,user_id=id)
 
 
@@ -71,7 +65,7 @@ def blogs():
 @main.route('/user/<blogid>/comments',methods=['GET','POST'])
 @login_required
 def comment(blogid):
-    pitch=Blog.query.filter_by(id=blogid).first()
+    blog=Blog.query.filter_by(id=blogid).first()
     form=submitcommentform()
     if request.method =='POST' and form.validate_on_submit():
         comment=Comment(comment=form.comment.data,user_id=current_user.id,name=current_user.username,blog_id=blogid)
@@ -83,12 +77,24 @@ def comment(blogid):
 
         return redirect (url_for('main.singleblog',blogid=blogid))
 
-    return render_template('pitch/comments.html',form=form,blogid=blogid)
+    return render_template('blog/comments.html',form=form,blogid=blogid)
 
 @main.route('/<blogid>')
 def singleblog(blogid):
     comments=Comment.query.filter_by(blog_id=blogid).all()
-    pitch=Blog.query.filter_by(id=blogid).first()
+    blog=Blog.query.filter_by(id=blogid).first()
    
     
-    return render_template('pitch/singleblog.html',pitch=pitch,comments=comments)
+    
+    return render_template('blog/singleblog.html',blog=blog,comments=comments)
+
+
+@main.route('/delete/<blogid>',methods=['POST'])  
+@login_required
+def deleteblog(blogid):
+    blog=Blog.query.filter_by(id=blogid).first()
+    db.session.delete(blog)
+    db.session.commit()
+    flash('blog deleted')
+    return redirect(url_for('main.blogs'))
+
