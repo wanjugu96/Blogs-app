@@ -1,3 +1,4 @@
+from app.request import get_quote
 from flask.helpers import flash
 from app.main.forms import submitblogform, submitcommentform
 from flask import render_template,request,redirect,url_for
@@ -86,8 +87,9 @@ def singleblog(blogid):
     blog=Blog.query.filter_by(id=blogid).first()
    
     format_blog = markdown2.markdown(blog.blog,extras=["code-friendly", "fenced-code-blocks"])
+    quote=get_quote()
     
-    return render_template('blog/singleblog.html',blog=blog,comments=comments,format_blog=format_blog)
+    return render_template('blog/singleblog.html',blog=blog,comments=comments,format_blog=format_blog,quote=quote)
 
 
 @main.route('/delete/<blogid>',methods=['POST'])  
@@ -99,7 +101,7 @@ def deleteblog(blogid):
     flash('blog deleted')
     return redirect(url_for('main.blogs'))
 
-@main.route('/<blogid>/delete comment/<commentid>',methods=['POST'])  
+@main.route('/delete comment/<blogid>/<commentid>',methods=['POST'])  
 @login_required
 def deletecomment(commentid,blogid):
     comment=Comment.query.filter_by(id=commentid).first()

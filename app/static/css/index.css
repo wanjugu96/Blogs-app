@@ -4,6 +4,11 @@
     font-size: large;
 }
 
+#quote {
+    background-color: #0a1935;
+    color: azure;
+}
+
 .words {
     background-color: #eef0f2;
 }

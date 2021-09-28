@@ -57,4 +57,10 @@ class Blog(db.Model):
     name=db.Column(db.String(255))
     comment=db.relationship('Comment',backref='blogs',lazy='dynamic')
 
+class Quote:
+    def __init__(self,author,id,quote,):
+        self.id=id
+        self.quote=quote
+        self.author=author
+
    
