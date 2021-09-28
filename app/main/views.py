@@ -5,6 +5,7 @@ from . import main
 from app.models import Blog, Comment, User 
 from flask_login import login_user,login_required,logout_user,current_user
 from .. import db, photos
+import markdown2 
 
 @main.route('/')
 def index():
@@ -79,14 +80,14 @@ def comment(blogid):
 
     return render_template('blog/comments.html',form=form,blogid=blogid)
 
-@main.route('/<blogid>')
+@main.route('/blog/<blogid>')
 def singleblog(blogid):
     comments=Comment.query.filter_by(blog_id=blogid).all()
     blog=Blog.query.filter_by(id=blogid).first()
    
+    format_blog = markdown2.markdown(blog.blog,extras=["code-friendly", "fenced-code-blocks"])
     
-    
-    return render_template('blog/singleblog.html',blog=blog,comments=comments)
+    return render_template('blog/singleblog.html',blog=blog,comments=comments,format_blog=format_blog)
 
 
 @main.route('/delete/<blogid>',methods=['POST'])  
@@ -97,4 +98,15 @@ def deleteblog(blogid):
     db.session.commit()
     flash('blog deleted')
     return redirect(url_for('main.blogs'))
+
+@main.route('/<blogid>/delete comment/<commentid>',methods=['POST'])  
+@login_required
+def deletecomment(commentid,blogid):
+    comment=Comment.query.filter_by(id=commentid).first()
+    blog=Blog.query.filter_by(id=blogid).first()
+    blogid=blog.id
+    db.session.delete(comment)
+    db.session.commit()
+    flash('comment deleted')
+    return redirect(url_for('main.singleblog',blogid=blogid))    
 

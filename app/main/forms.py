@@ -10,7 +10,7 @@ class UpdateProfile(FlaskForm):
 
 class submitblogform(FlaskForm):
     title=StringField('Title of your blog',validators=[Required()])
-    blog=TextAreaField('Your blog',validators=[Required()])
+    blog=TextAreaField('Your blog')
     
 
     submit=SubmitField('Submit')
